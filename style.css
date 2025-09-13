@@ -1,0 +1,200 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: #f4f4f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* Header Styles */
+header {
+  background: #004080;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  color: #f6f7f8;
+  margin-top: 20px;
+}
+
+section {
+  padding: 20px;
+}
+
+/* Navigation Styles */
+nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+nav ul li {
+  display: inline;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #003060;
+}
+
+/* Form Container */
+form {
+  max-width: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Labels */
+form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #004080;
+}
+
+/* Form Inputs */
+form input[type="text"],
+form input[type="email"],
+form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Form Input Focus */
+form input:focus,
+form textarea:focus {
+  border-color: #004080;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 64, 128, 0.5);
+}
+
+button {
+  background: #02284e;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 10px 0;
+}
+
+/* Submit Button */
+form button {
+  background: #004080;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+/* Submit Button Hover */
+form button:hover {
+  background: #003060;
+}
+
+button:hover {
+  background: #003060;
+}
+
+#result {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+/* Showcase Section */
+#showcase {
+  padding: 20px;
+  background: #f9f9f9;
+  text-align: center;
+}
+
+#showcase h2 {
+  color: #004080;
+  margin-bottom: 20px;
+}
+
+.showcase-item {
+  position: relative;
+  display: inline-block;
+  margin: 20px;
+  transform: rotate(-5deg); /* Diagonal effect */
+  transition: transform 0.3s ease;
+}
+
+.showcase-item:hover {
+  transform: rotate(0deg); /* Straighten on hover */
+}
+
+.showcase-image {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.showcase-text {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 64, 128, 0.8); /* Semi-transparent background */
+  color: white;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  max-width: 90%;
+  text-align: left;
+}
+
+/* Resume Link */
+.resume-link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background: #004080;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.resume-link:hover {
+  background: #003060;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  form {
+    padding: 15px;
+  }
+
+  form button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Falling Brick Game</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+
+    canvas {
+      display: block;
+      background: #333;
+    }
+
+    #game-over {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 2rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="game-over">Game Over! Refresh to play again.</div>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const car = {
+      x: canvas.width / 2 - 25,
+      y: canvas.height - 100,
+      width: 50,
+      height: 100,
+      color: 'blue',
+      speed: 20
+    };
+
+    const obstacles = [];
+    const obstacleWidth = 50;
+    const obstacleHeight = 100;
+    const obstacleSpeed = 10;
+
+    let gameRunning = true;
+    let score = 0; // Initialize score
+
+    function drawCar() {
+      ctx.fillStyle = car.color;
+      ctx.fillRect(car.x, car.y, car.width, car.height);
+    }
+
+    function drawObstacles() {
+      ctx.fillStyle = 'red';
+      obstacles.forEach(obstacle => {
+        ctx.fillRect(obstacle.x, obstacle.y, obstacleWidth, obstacleHeight);
+      });
+    }
+
+    function updateObstacles() {
+      obstacles.forEach(obstacle => {
+        obstacle.y += obstacleSpeed;
+      });
+
+      if (Math.random() < 0.02) {
+        const x = Math.random() * (canvas.width - obstacleWidth);
+        obstacles.push({ x, y: -obstacleHeight });
+      }
+
+      for (let i = obstacles.length - 1; i >= 0; i--) {
+        if (obstacles[i].y > canvas.height) {
+          obstacles.splice(i, 1);
+          score++; // Increment score when an obstacle moves off-screen
+        }
+      }
+    }
+
+    function drawScore() {
+      ctx.fillStyle = 'black';
+      ctx.font = '24px Arial';
+      ctx.fillText(`Score: ${score}`, 10, 30); // Display score at the top-left corner
+    }
+
+    function checkCollision() {
+      for (const obstacle of obstacles) {
+        if (
+          car.x < obstacle.x + obstacleWidth &&
+          car.x + car.width > obstacle.x &&
+          car.y < obstacle.y + obstacleHeight &&
+          car.y + car.height > obstacle.y
+        ) {
+          gameRunning = false;
+          document.getElementById('game-over').style.display = 'block';
+        }
+      }
+    }
+
+    function gameLoop() {
+      if (!gameRunning) return;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawCar();
+      drawObstacles();
+      updateObstacles();
+      checkCollision();
+      drawScore(); // Draw the score in each frame
+
+      requestAnimationFrame(gameLoop);
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft' && car.x > 0) {
+        car.x -= car.speed;
+      } else if (e.key === 'ArrowRight' && car.x < canvas.width - car.width) {
+        car.x += car.speed;
+      }
+    });
+
+    gameLoop();
+  </script>
+</body>
+</html>

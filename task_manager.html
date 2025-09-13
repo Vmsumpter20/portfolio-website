@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .day {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .day.selected {
+      background-color: #007BFF;
+      color: white;
+    }
+    .task-list {
+      margin-top: 20px;
+    }
+    .task {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 4px;
+      background-color: #f9f9f9;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Vaniece Sumpter's Portfolio</h1>
+    <p>Entry-Level IT Professional | Software Development | IT Support</p>
+    <nav>
+      <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="templates/form.html">Message Me</a></li>
+      </ul>
+    </nav>
+</header>
+  <h1>Task Manager</h1>
+  <div>
+    <button id="prevMonth">Previous Month</button>
+    <span id="currentMonth"></span>
+    <button id="nextMonth">Next Month</button>
+  </div>
+  <div class="calendar" id="calendar"></div>
+  <div id="taskSection" class="hidden">
+    <h2>Tasks for <span id="selectedDate"></span></h2>
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="Enter a task" required>
+      <button type="submit">Add Task</button>
+    </form>
+    <div class="task-list" id="taskList"></div>
+  </div>
+
+  <script>
+    const calendar = document.getElementById('calendar');
+    const currentMonth = document.getElementById('currentMonth');
+    const prevMonth = document.getElementById('prevMonth');
+    const nextMonth = document.getElementById('nextMonth');
+    const taskSection = document.getElementById('taskSection');
+    const selectedDateElement = document.getElementById('selectedDate');
+    const taskForm = document.getElementById('taskForm');
+    const taskInput = document.getElementById('taskInput');
+    const taskList = document.getElementById('taskList');
+
+    let currentDate = new Date();
+    let selectedDate = null;
+    const tasks = {};
+
+    function renderCalendar() {
+      calendar.innerHTML = '';
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth();
+      currentMonth.textContent = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        calendar.appendChild(emptyCell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day;
+        dayElement.classList.add('day');
+        dayElement.addEventListener('click', () => selectDate(year, month, day));
+        calendar.appendChild(dayElement);
+      }
+    }
+
+    function selectDate(year, month, day) {
+      selectedDate = new Date(year, month, day);
+      selectedDateElement.textContent = selectedDate.toDateString();
+      taskSection.style.display = 'block';
+
+      // Remove the 'selected' class from all days
+      document.querySelectorAll('.day').forEach(dayElement => {
+        dayElement.classList.remove('selected');
+      });
+
+      // Highlight the correct day
+      const dayElements = calendar.querySelectorAll('.day');
+      const firstDay = new Date(year, month, 1).getDay(); // Offset for the first day of the month
+      const index = day + selectedDate - 1; // Correctly calculate the index
+      console.log('Selected Date:', selectedDate);
+      console.log('First Day Offset:', firstDay);
+      console.log('Calculated Index:', index);
+      dayElements[index].classList.add('selected');
+
+      renderTasks();
+    }
+
+    function renderTasks() {
+      taskList.innerHTML = '';
+      const dateKey = selectedDate.toDateString();
+      if (tasks[dateKey]) {
+        tasks[dateKey].forEach((task, index) => {
+          const taskElement = document.createElement('div');
+          taskElement.classList.add('task'); // Add the 'task' class for styling
+
+          // Add task text
+          const taskText = document.createElement('span');
+          taskText.textContent = task;
+          taskElement.appendChild(taskText);
+
+          // Add "Remove" button
+          const removeButton = document.createElement('button');
+          removeButton.textContent = 'Remove';
+          removeButton.style.marginLeft = '10px';
+          removeButton.addEventListener('click', () => {
+            tasks[dateKey].splice(index, 1); // Remove the task from the array
+            if (tasks[dateKey].length === 0) {
+              delete tasks[dateKey]; // Remove the date key if no tasks remain
+            }
+            renderTasks(); // Re-render the task list
+          });
+          taskElement.appendChild(removeButton);
+
+          taskList.appendChild(taskElement);
+        });
+      }
+    }
+
+    taskForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const task = taskInput.value;
+      const dateKey = selectedDate.toDateString();
+      if (!tasks[dateKey]) {
+        tasks[dateKey] = [];
+      }
+      tasks[dateKey].push(task);
+      taskInput.value = '';
+      renderTasks();
+    });
+
+    prevMonth.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    nextMonth.addEventListener('click', () => {
+      currentDate.setMonth(currentDate.getMonth() + 1);
+      renderCalendar();
+    });
+
+    renderCalendar();
+  </script>
+</body>
+</html>
